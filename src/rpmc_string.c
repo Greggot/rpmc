@@ -48,3 +48,25 @@ String read_string_from_console(void)
     string_copy_from_buffer(&string, buffer);
     return string;
 }
+
+String_view string_view_create_from_char(const char* ptr)
+{
+    String_view string_view = {
+        .ptr = ptr,
+        .size = strlen(ptr)
+    };
+    return string_view;
+}
+
+int string_view_is_equal_to_const_char(const String_view* view, const char* buffer)
+{
+    const size_t buffer_length = strlen(buffer) - 1;
+    if (view->size != buffer_length) {
+        return 0;
+    }
+    const char* ptr = buffer;
+    for (size_t i = 0; i < buffer_length; ++i, ++ptr, ++buffer)
+        if (*buffer != *ptr)
+            return 0;
+    return 1;
+}
