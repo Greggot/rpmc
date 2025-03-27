@@ -1,0 +1,16 @@
+#pragma once
+
+#include "rpmc_string.h"
+typedef enum {
+	rs_ok = 0,
+	rs_name_already_exists = 1,
+	rs_name_incorrect_format = 2,
+	rs_password_incorrect_format = 3
+} Register_status;
+
+const char* register_status_to_const_char(Register_status status);
+
+/// @todo Добавить вызов стаба
+/// @todo rs_name_incorrect_format
+/// @todo rs_password_incorrect_format
+Register_status rpmc_register(const String* name, const String* password);
