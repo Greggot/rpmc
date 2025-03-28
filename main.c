@@ -14,10 +14,23 @@ typedef enum {
     action_unknown
 } Action;
 
-/// @todo Сделать string_views статическими или передавать из main 
-/// в качестве параметра
-Action read_action(void)
+Action read_action(const String_view* string_views, size_t size)
 {
+    char buffer[128];
+    fgets(buffer, 128, stdin);
+    /// Чтобы не считать длину строкти каждый вызов сравнения
+    String_view buffer_view = string_view_create_from_char(buffer);
+    --buffer_view.size;
+
+    for (size_t i = 0; i < size; ++i)
+        if (string_view_is_equal_to_string_view(&string_views[i], &buffer_view))
+            return i;
+    return action_unknown;
+}
+
+int main(void)
+{
+    /// Строковые константы с заранее посчитанной длиной,
     const String_view string_views[] = {
         string_view_create_from_char("exit"),
         string_view_create_from_char("login"),
@@ -27,19 +40,9 @@ Action read_action(void)
         string_view_create_from_char("messages"),
         string_view_create_from_char("help")
     };
+    const size_t size = sizeof(string_views) / sizeof(String_view);
+    Action action = read_action(string_views, size);
 
-    char buffer[128];
-    fgets(buffer, 128, stdin);
-
-    for (size_t i = 0; i < sizeof(string_views) / sizeof(String_view); ++i)
-        if (string_view_is_equal_to_const_char(&string_views[i], buffer))
-            return i;
-    return action_unknown;
-}
-
-int main(void)
-{
-    Action action = read_action();
     while (action) {
         switch (action)
         {
@@ -51,7 +54,7 @@ int main(void)
             default:
                 break;
         }
-        action = read_action();
+        action = read_action(string_views, size);
     }
     return 0;
 }

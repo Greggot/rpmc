@@ -1,6 +1,7 @@
 #pragma once
 
 #include "rpmc_string.h"
+
 typedef enum {
 	rs_ok = 0,
 	rs_name_already_exists = 1,
