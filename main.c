@@ -1,5 +1,6 @@
 #include "credentials.h"
 #include "rpmc_string.h"
+#include "session.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -46,6 +47,10 @@ int main(void)
     while (action) {
         switch (action)
         {
+            case action_log_in:
+                terminal_log_in();
+                break;
+
             case action_register: {
                 Credentials credentials = terminal_register();
                 credentials_delete(&credentials);

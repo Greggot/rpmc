@@ -9,6 +9,17 @@ String string_create_empty(void)
     return string;
 }
 
+String string_create_from_const_char(const char* buffer)
+{
+    String string = { 
+        .size = strlen(buffer) 
+    };
+    string.ptr = (char*)malloc(string.size + 1);
+    memcpy(string.ptr, buffer, string.size);
+    string.ptr[string.size] = 0;
+    return string;
+}
+
 int string_is_equal_to_const_char(const String* string, const char* buffer)
 {
     const size_t buffer_size = strlen(buffer);

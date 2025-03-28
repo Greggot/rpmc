@@ -9,9 +9,8 @@ typedef enum {
 	rs_password_incorrect_format = 3
 } Register_status;
 
+/// @brief Перевод ошибки в читаемый для пользователя вид
 const char* register_status_to_const_char(Register_status status);
 
 /// @todo Добавить вызов стаба
-/// @todo rs_name_incorrect_format
-/// @todo rs_password_incorrect_format
 Register_status rpmc_register(const String* name, const String* password);

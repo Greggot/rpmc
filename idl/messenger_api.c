@@ -19,8 +19,20 @@ typedef enum {
 	rs_password_incorrect_format = 3
 } Register_status;
 
+typedef enum {
+	lis_ok = 0,
+	lis_incorrect_login = 1,
+	lis_incorrect_password = 2,
+	lis_incorrect_device = 3 
+} Log_in_status;
+
+typedef struct {
+	Log_in_status log_in_status;
+	long id;
+} Log_in_token;
+
 long Register([in, string] unsigned char* name, [in, string] unsigned char* password);
-long Log_in([in, string] unsigned char* name, [in, string] unsigned char* password, [in, string] unsigned char* device);
+Log_in_token Log_in([in, string] unsigned char* name, [in, string] unsigned char* password, [in, string] unsigned char* device);
 void Log_out(long session);
 
 typedef enum {

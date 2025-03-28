@@ -13,6 +13,7 @@ typedef struct {
 } String_view;
 
 String string_create_empty(void);
+String string_create_from_const_char(const char*);
 void string_deallocate(String *string);
 
 String_view string_view_create_from_char(const char*);
