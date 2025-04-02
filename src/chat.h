@@ -1,3 +1,5 @@
 #pragma once
 
-void terminal_user_chat_dialog(long);
+#include "api/users.h"
+
+void terminal_user_chat_dialog(const User*);

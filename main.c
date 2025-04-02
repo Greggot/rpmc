@@ -1,4 +1,3 @@
-#include "chat.h"
 #include "contacts.h"
 #include "credentials.h"
 #include "dialog.h"
@@ -14,7 +13,6 @@ typedef enum {
     main_dialog_log_in,
     main_dialog_register,
     main_dialog_users,
-    main_dialog_test_chat,
     main_dialog_help
 } Main_dialog;
 
@@ -48,7 +46,6 @@ int main(void)
         string_view_create_from_char("login"),
         string_view_create_from_char("register"),
         string_view_create_from_char("users"),
-        string_view_create_from_char("chat"),
         string_view_create_from_char("help")
     };
 
@@ -69,12 +66,6 @@ int main(void)
 
             case main_dialog_users:
                 terminal_contacts_list();
-                break;
-
-            /// @todo Убрать, когда будет готов диалог со списком пользователей,
-            /// из которого уже можно будет открывать чат с кем-либо
-            case main_dialog_test_chat:
-                terminal_user_chat_dialog(1);
                 break;
 
             default:

@@ -1,5 +1,6 @@
 #include "chat.h"
 #include "api/messages.h"
+#include "api/users.h"
 #include "dialog.h"
 #include "rpmc_string.h"
 #include "session.h"
@@ -7,10 +8,9 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <wchar.h>
 
 /// @todo Получить имя пользователя по user_id
-static void output_chat(Message_list* head, long user_id)
+static void output_chat(Message_list* head)
 {
     Message_list* current = head;
     while (current) {
@@ -38,11 +38,11 @@ static void output_files(Message_list* head)
     message_list_delete(head);
 }
 
-static void output_files_only(long user_id)
+static void output_files_only(const User* user)
 {
     system("clear");
-    printf(COLOR_CHAT_HEADER "Media from " COLOR_USER_NAME "%zu\n" COLOR_CLEAN, user_id);
-    Message_list_iterator list = rpmc_receive_messages_from_user(user_session_id(), user_id);
+    printf(COLOR_CHAT_HEADER "Media from " COLOR_USER_NAME "%s\n" COLOR_CLEAN, user->name);
+    Message_list_iterator list = rpmc_receive_messages_from_user(user_session_id(), user->uuid);
     if (list.head == NULL) {
         printf(COLOR_OFFER "There is no files yet\n" COLOR_CLEAN);
     } else {
@@ -50,15 +50,15 @@ static void output_files_only(long user_id)
     }
 }
 
-static void output_full_history(long user_id)
+static void output_full_history(const User* user)
 {
     system("clear");
-    printf(COLOR_CHAT_HEADER "Chat with " COLOR_USER_NAME "%zu\n" COLOR_CLEAN, user_id);
-    Message_list_iterator list = rpmc_receive_messages_from_user(user_session_id(), user_id);
+    printf(COLOR_CHAT_HEADER "Chat with " COLOR_USER_NAME "%s\n" COLOR_CLEAN,  user->name);
+    Message_list_iterator list = rpmc_receive_messages_from_user(user_session_id(), user->uuid);
     if (list.head == NULL) {
         printf(COLOR_OFFER "There is no messages yet\n" COLOR_CLEAN);
     } else {
-        output_chat(list.head, user_id);
+        output_chat(list.head);
     }
 }
 
@@ -67,9 +67,9 @@ typedef enum {
     user_files_download
 } User_files_dialog;
 
-void terminal_user_files_dialog(long user_id)
+void terminal_user_files_dialog(const User* user)
 {
-    output_files_only(user_id);
+    output_files_only(user);
     const String_view string_views[] = {
         string_view_create_from_char("back"),
         string_view_create_from_char("download"),
@@ -91,9 +91,9 @@ typedef enum {
 /// @todo Поток, который будет обновлять историю сообщений
 /// @todo Показывать N последних сообщений в переписке
 /// @todo Навигация с использованием getch
-void terminal_user_chat_dialog(long user_id)
+void terminal_user_chat_dialog(const User* user)
 {
-    output_full_history(user_id);
+    output_full_history(user);
 
     const String_view string_views[] = {
         string_view_create_from_char("back"),
@@ -116,14 +116,14 @@ void terminal_user_chat_dialog(long user_id)
             } break;
 
             case user_chat_files:
-                terminal_user_files_dialog(user_id);
+                terminal_user_files_dialog(user);
                 break;
 
             default:
                 break;
         }
         
-        output_full_history(user_id);
+        output_full_history(user);
         action = dialog_read_action(string_views, sizeof(string_views) / sizeof(String_view));
     }
     user_session_delete();

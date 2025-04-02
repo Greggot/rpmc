@@ -1,5 +1,6 @@
 #include "contacts.h"
 #include "api/users.h"
+#include "chat.h"
 #include "dialog.h"
 #include "rpmc_string.h"
 #include "session.h"
@@ -57,6 +58,12 @@ static void output_online_list(void)
     }
 }
 
+static void enter_chat(int i)
+{
+    User_list_iterator list = rpmc_receive_users(user_session_id(), ruf_friends);
+    terminal_user_chat_dialog(list.head->user);
+}
+
 typedef enum {
     contacts_exit,
     contacts_list_all,
@@ -82,6 +89,11 @@ void terminal_contacts_list(void)
         {
             case contacts_list_online:
                 output_online_list();
+                break;
+
+            case contacts_enter_chat:
+                enter_chat(0);
+                output_friends_list();
                 break;
 
             default:
