@@ -6,6 +6,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct {
+	String name;
+	String password;
+} Credentials;
+
+Credentials credentials_create_empty(void);
+void credentials_delete(Credentials* credentials);
+
+void credentials_read_password(Credentials* credentials);
+void credentials_read_full(Credentials* credentials);
+
 Credentials credentials_create_empty(void)
 {
     Credentials credentials = {

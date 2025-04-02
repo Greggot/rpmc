@@ -120,6 +120,19 @@ static api_Message bogus_message(Message_status status, const char* text)
     return message;
 }
 
+static api_Message bogus_file(Message_status status, const char* name)
+{
+    api_Message message = {
+        .length = strlen(name),
+        .type = mt_file,
+        .status = status,
+        .time = time(NULL),
+    };
+    memcpy(message.text, name, message.length);
+    message.text[message.length] = 0;
+    return message;
+}
+
 static Message_list_iterator bogus_message_history(void)
 {
     Message_list_iterator list = {
@@ -130,6 +143,7 @@ static Message_list_iterator bogus_message_history(void)
     api_Message messages[] = {
         bogus_message(ms_sender, "Hi"),
         bogus_message(ms_receiver, "Hi"),
+        bogus_file(ms_sender, "Duran Duran - Invisible.mp3"),
         bogus_message(ms_sender, "When you can't even say my name"),
         bogus_message(ms_sender, "Has the memory gone? Are you feeling numb?"),
         bogus_message(ms_receiver, "Go on, call my name"),
@@ -137,6 +151,7 @@ static Message_list_iterator bogus_message_history(void)
         bogus_message(ms_sender, "Will you say my name?"),
         bogus_message(ms_receiver, "Has the memory gone? Are you feeling numb?"),
         bogus_message(ms_sender, "Or have I become invisible?"),
+        bogus_file(ms_receiver, "image.png"),
     };
 
     for (size_t i = 0; i < sizeof(messages) / sizeof(api_Message); ++i) {
