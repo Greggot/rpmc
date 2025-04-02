@@ -5,8 +5,14 @@
 #include "rpmc_string.h"
 #include "terminal.h"
 #include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static long session_id = 0;
+static String user_name = {
+    .ptr = NULL,
+    .size = 0
+};
 
 long user_session_id(void)
 {
@@ -57,6 +63,7 @@ static void log_in_credentials_read_full(Log_in_credentials* credentials)
 
 void terminal_log_in(void)
 {
+    system("clear");
     Log_in_credentials log_in = {
         .login = string_create_empty(),
         .password = string_create_empty(),
@@ -92,6 +99,9 @@ void terminal_log_in(void)
         }
     }
     printf("Logged in as: \"" COLOR_USER_NAME "%s" COLOR_CLEAN "\"\n", log_in.login.ptr);
+    user_name = log_in.login;
+    string_deallocate(&log_in.password); 
+    string_deallocate(&log_in.device);
 }
 
 void log_out(void)
@@ -104,4 +114,14 @@ void log_out(void)
     printf("Log out %zu\n", session);
     rpmc_log_out(session);
     user_sesion_id_set(0);
+}
+
+void user_session_delete(void)
+{
+    string_deallocate(&user_name);
+}
+
+String user_session_name(void)
+{
+    return user_name;
 }

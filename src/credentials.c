@@ -3,6 +3,8 @@
 #include "dialog.h"
 #include "terminal.h"
 #include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 Credentials credentials_create_empty(void)
 {
@@ -46,6 +48,7 @@ void credentials_read_full(Credentials* credentials)
 
 void terminal_register(void)
 {
+    system("clear");
     Credentials credentials = credentials_create_empty();
     credentials_read_full(&credentials);
 
