@@ -1,5 +1,6 @@
 #include "session.h"
 #include "api/log_in.h"
+#include "api/log_out.h"
 #include "rpmc_string.h"
 #include <stdio.h>
 
@@ -88,5 +89,16 @@ void terminal_log_in(void)
                 break;
         }
     }
-    printf("Logged in as \"%s\"\n", log_in.login.ptr);
+}
+
+void log_out(void)
+{
+    long session = user_session_id();
+    if (!session) {
+        printf(COLOR_WARNING "Log out with no session\n" COLOR_CLEAN);
+        return;
+    }
+    printf("Log out %zu\n", session);
+    rpmc_log_out(session);
+    user_sesion_id_set(0);
 }

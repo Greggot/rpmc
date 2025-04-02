@@ -1,8 +1,8 @@
 #include "credentials.h"
 #include "rpmc_string.h"
 #include "session.h"
+#include <signal.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 typedef enum {
     action_log_out,
@@ -29,8 +29,18 @@ Action read_action(const String_view* string_views, size_t size)
     return action_unknown;
 }
 
+/// @brief Перехватывает событие пользовательского прерывания программы как в Python
+void ctrl_c_handler(int sig)
+{
+    signal(sig, SIG_IGN);
+    printf("\rUse \"exit\" to terminate session\n");
+    signal(SIGINT, ctrl_c_handler);
+}
+
 int main(void)
 {
+    signal(SIGINT, ctrl_c_handler);
+
     /// Строковые константы с заранее посчитанной длиной,
     const String_view string_views[] = {
         string_view_create_from_char("exit"),
@@ -61,5 +71,7 @@ int main(void)
         }
         action = read_action(string_views, size);
     }
+    log_out();
+
     return 0;
 }
