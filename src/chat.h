@@ -1,4 +1,3 @@
 #pragma once
 
-void terminal_message_dialog(void);
-void terminal_output_chat(long user_id);
+void terminal_user_chat_dialog(long);

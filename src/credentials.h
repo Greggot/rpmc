@@ -15,4 +15,4 @@ void credentials_read_full(Credentials* credentials);
 
 /// @brief Считать регистрацию из консоли
 /// @todo Проверка логина и пароля на корректный формат
-Credentials terminal_register(void);
+void terminal_register(void);

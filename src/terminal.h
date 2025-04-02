@@ -6,3 +6,5 @@
 #define COLOR_USER_NAME "\x1B[1;34m"
 #define COLOR_OFFER "\x1B[34m"
 #define COLOR_CLEAN "\x1B[0m"
+
+#define COLOR_CHAT_HEADER "\x1B[1;32m"

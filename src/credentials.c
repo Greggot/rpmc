@@ -1,5 +1,6 @@
 #include "credentials.h"
 #include "api/register.h"
+#include "dialog.h"
 #include "terminal.h"
 #include <stdio.h>
 
@@ -26,7 +27,7 @@ void credentials_read_password(Credentials* credentials)
     while (!credentials->password.size)
     {
         printf(COLOR_OFFER "Enter password:\n" COLOR_CLEAN);
-        credentials->password = read_string_from_console();
+        credentials->password = dialog_read_string_from_console();
     }
 }
 
@@ -38,12 +39,12 @@ void credentials_read_full(Credentials* credentials)
     while (!credentials->name.size)
     {
         printf(COLOR_OFFER "Enter name:\n" COLOR_CLEAN);
-        credentials->name = read_string_from_console();
+        credentials->name = dialog_read_string_from_console();
     }
     credentials_read_password(credentials);
 }
 
-Credentials terminal_register(void)
+void terminal_register(void)
 {
     Credentials credentials = credentials_create_empty();
     credentials_read_full(&credentials);
@@ -70,5 +71,5 @@ Credentials terminal_register(void)
         }
     }
     printf(COLOR_SUCCESS "\nRegistration successful\n" COLOR_CLEAN);
-    return credentials;
+    credentials_delete(&credentials);
 }

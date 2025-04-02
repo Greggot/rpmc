@@ -1,33 +1,19 @@
+#include "chat.h"
 #include "credentials.h"
+#include "dialog.h"
 #include "rpmc_string.h"
 #include "session.h"
 #include <signal.h>
 #include <stdio.h>
 
 typedef enum {
-    action_log_out,
-    action_log_in,
-    action_register,
-    action_send_message,
-    action_display_users,
-    action_display_user_messages,
-    action_help,
-    action_unknown
-} Action;
-
-Action read_action(const String_view* string_views, size_t size)
-{
-    char buffer[128];
-    fgets(buffer, 128, stdin);
-    /// Чтобы не считать длину строкти каждый вызов сравнения
-    String_view buffer_view = string_view_create_from_char(buffer);
-    --buffer_view.size;
-
-    for (size_t i = 0; i < size; ++i)
-        if (string_view_is_equal_to_string_view(&string_views[i], &buffer_view))
-            return i;
-    return action_unknown;
-}
+    main_dialog_log_out,
+    main_dialog_log_in,
+    main_dialog_register,
+    main_dialog_users,
+    main_dialog_test_chat,
+    main_dialog_help
+} Main_dialog;
 
 /// @brief Перехватывает событие пользовательского прерывания программы как в Python
 void ctrl_c_handler(int sig)
@@ -39,37 +25,41 @@ void ctrl_c_handler(int sig)
 
 int main(void)
 {
-    signal(SIGINT, ctrl_c_handler);
+    // signal(SIGINT, ctrl_c_handler);
 
     /// Строковые константы с заранее посчитанной длиной,
     const String_view string_views[] = {
         string_view_create_from_char("exit"),
         string_view_create_from_char("login"),
         string_view_create_from_char("register"),
-        string_view_create_from_char("send_message"),
         string_view_create_from_char("users"),
-        string_view_create_from_char("messages"),
+        string_view_create_from_char("chat"),
         string_view_create_from_char("help")
     };
     const size_t size = sizeof(string_views) / sizeof(String_view);
-    Action action = read_action(string_views, size);
+    Main_dialog action = dialog_read_action(string_views, size);
 
     while (action) {
         switch (action)
         {
-            case action_log_in:
+            case main_dialog_log_in:
                 terminal_log_in();
                 break;
 
-            case action_register: {
-                Credentials credentials = terminal_register();
-                credentials_delete(&credentials);
-            } break;
+            case main_dialog_register:
+                terminal_register();
+                break;
+
+            /// @todo Убрать, когда будет готов диалог со списком пользователей,
+            /// из которого уже можно будет открывать чат с кем-либо
+            case main_dialog_test_chat:
+                terminal_user_chat_dialog(1);
+                break;
 
             default:
                 break;
         }
-        action = read_action(string_views, size);
+        action = dialog_read_action(string_views, size);
     }
     log_out();
 

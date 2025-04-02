@@ -40,26 +40,6 @@ void string_deallocate(String* string)
     string->ptr = NULL;
 }
 
-static void string_copy_from_buffer(String* string, const char* buffer)
-{
-    string->size = strlen(buffer) - 1;
-    if (string->size == 0)
-        return;
-    string->ptr = (char*)malloc(string->size + 1);
-    memcpy(string->ptr, buffer, string->size);
-    string->ptr[string->size] = 0;
-}
-
-String read_string_from_console(void)
-{
-    static char buffer[128];
-    String string = string_create_empty();
-    if (fgets(buffer, 128, stdin) == NULL)
-        return string;
-    string_copy_from_buffer(&string, buffer);
-    return string;
-}
-
 String_view string_view_create_from_char(const char* ptr)
 {
     String_view string_view = {
