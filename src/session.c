@@ -2,6 +2,7 @@
 #include "api/log_in.h"
 #include "api/log_out.h"
 #include "rpmc_string.h"
+#include "terminal.h"
 #include <stdio.h>
 
 static long session_id = 0;
@@ -35,7 +36,7 @@ static void log_in_credentials_read_password(Log_in_credentials* credentials)
 
     while (!credentials->password.size)
     {
-        printf("Enter password:\n");
+        printf(COLOR_OFFER "Enter password:\n" COLOR_CLEAN);
         credentials->password = read_string_from_console();
     }
 }
@@ -47,7 +48,7 @@ static void log_in_credentials_read_full(Log_in_credentials* credentials)
 
     while (!credentials->login.size)
     {
-        printf("Enter name:\n");
+        printf(COLOR_OFFER "Enter name:\n" COLOR_CLEAN);
         credentials->login = read_string_from_console();
     }
     log_in_credentials_read_password(credentials);
@@ -89,6 +90,7 @@ void terminal_log_in(void)
                 break;
         }
     }
+    printf("Logged in as: \"" COLOR_USER_NAME "%s" COLOR_CLEAN "\"\n", log_in.login.ptr);
 }
 
 void log_out(void)

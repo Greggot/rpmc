@@ -1,5 +1,6 @@
 #include "credentials.h"
 #include "api/register.h"
+#include "terminal.h"
 #include <stdio.h>
 
 Credentials credentials_create_empty(void)
@@ -24,7 +25,7 @@ void credentials_read_password(Credentials* credentials)
 
     while (!credentials->password.size)
     {
-        printf("Enter password:\n");
+        printf(COLOR_OFFER "Enter password:\n" COLOR_CLEAN);
         credentials->password = read_string_from_console();
     }
 }
@@ -36,7 +37,7 @@ void credentials_read_full(Credentials* credentials)
 
     while (!credentials->name.size)
     {
-        printf("Enter name:\n");
+        printf(COLOR_OFFER "Enter name:\n" COLOR_CLEAN);
         credentials->name = read_string_from_console();
     }
     credentials_read_password(credentials);
@@ -45,7 +46,6 @@ void credentials_read_full(Credentials* credentials)
 Credentials terminal_register(void)
 {
     Credentials credentials = credentials_create_empty();
-    printf("Registration credentials.\n");
     credentials_read_full(&credentials);
 
     Register_status status = rs_name_already_exists;
@@ -56,12 +56,12 @@ Credentials terminal_register(void)
         switch (status) {
             case rs_name_already_exists:
             case rs_name_incorrect_format:
-                printf("\nLogin: %s\n", register_status_to_const_char(status));
+                printf(COLOR_ERROR "\nLogin: %s\n" COLOR_CLEAN, register_status_to_const_char(status));
                 credentials_read_full(&credentials);
                 break;
 
             case rs_password_incorrect_format:
-                printf("\nPassword: %s\n", register_status_to_const_char(status));
+                printf(COLOR_ERROR "\nPassword: %s\n" COLOR_CLEAN, register_status_to_const_char(status));
                 credentials_read_password(&credentials);
                 break;
 
@@ -69,6 +69,6 @@ Credentials terminal_register(void)
                 break;
         }
     }
-    printf("Registration successful\n");
+    printf(COLOR_SUCCESS "\nRegistration successful\n" COLOR_CLEAN);
     return credentials;
 }
