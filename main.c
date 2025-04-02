@@ -1,10 +1,10 @@
 #include "chat.h"
+#include "contacts.h"
 #include "credentials.h"
 #include "dialog.h"
 #include "rpmc_string.h"
 #include "session.h"
 #include "terminal.h"
-#include <stdio.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,6 +65,10 @@ int main(void)
 
             case main_dialog_register:
                 terminal_register();
+                break;
+
+            case main_dialog_users:
+                terminal_contacts_list();
                 break;
 
             /// @todo Убрать, когда будет готов диалог со списком пользователей,

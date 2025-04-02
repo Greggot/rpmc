@@ -10,3 +10,6 @@
 #define COLOR_CHAT_HEADER "\x1B[1;32m"
 #define COLOR_CHAT_OWN_NAME "\x1B[1;32m"
 #define COLOR_CHAT_FILE "\x1B[31m"
+
+#define COLOR_USER_ONLINE "\x1B[1;32m"
+#define COLOR_USER_OFFLINE "\x1B[34m"
