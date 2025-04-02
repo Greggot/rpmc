@@ -77,7 +77,7 @@ int string_view_is_equal_to_string_view(const String_view* right, const String_v
     const char* lptr = left->ptr;
     const char* rptr = right->ptr;
     for (size_t i = 0; i < left->size; ++i, ++lptr, ++rptr)
-        if (*lptr != *lptr)
+        if (*lptr != *rptr)
             return 0;
     return 1;
 }
