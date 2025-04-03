@@ -19,7 +19,6 @@ static void output_users(User_list* head)
         }
         current = current->next;
     }
-    user_list_delete(head);
 }
 
 static void output_online_users(User_list* head)
@@ -31,7 +30,6 @@ static void output_online_users(User_list* head)
         }
         current = current->next;
     }
-    user_list_delete(head);
 }
 
 static void output_friends_list(void)
@@ -44,6 +42,7 @@ static void output_friends_list(void)
     } else {
         output_users(list.head);
     }
+    user_list_delete(list.head);
 }
 
 static void output_online_list(void)
@@ -56,12 +55,14 @@ static void output_online_list(void)
     } else {
         output_online_users(list.head);
     }
+    user_list_delete(list.head);
 }
 
 static void enter_chat(int i)
 {
     User_list_iterator list = rpmc_receive_users(user_session_id(), ruf_friends);
     terminal_user_chat_dialog(list.head->user);
+    user_list_delete(list.head);
 }
 
 typedef enum {
@@ -103,5 +104,4 @@ void terminal_contacts_list(void)
 
         action = dialog_read_action(string_views, sizeof(string_views) / sizeof(String_view));
     }
-    user_session_delete();
 }

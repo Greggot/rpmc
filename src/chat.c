@@ -22,7 +22,6 @@ static void output_chat(Message_list* head)
         }
         current = current->next;
     }
-    message_list_delete(head);
 }
 
 static void output_files(Message_list* head)
@@ -35,7 +34,6 @@ static void output_files(Message_list* head)
         }
         current = current->next;
     }
-    message_list_delete(head);
 }
 
 static void output_files_only(const User* user)
@@ -48,6 +46,7 @@ static void output_files_only(const User* user)
     } else {
         output_files(list.head);
     }
+    message_list_delete(list.head);
 }
 
 static void output_full_history(const User* user)
@@ -60,6 +59,7 @@ static void output_full_history(const User* user)
     } else {
         output_chat(list.head);
     }
+    message_list_delete(list.head);
 }
 
 typedef enum {
@@ -126,5 +126,4 @@ void terminal_user_chat_dialog(const User* user)
         output_full_history(user);
         action = dialog_read_action(string_views, sizeof(string_views) / sizeof(String_view));
     }
-    user_session_delete();
 }

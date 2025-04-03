@@ -75,6 +75,7 @@ int main(void)
         action = dialog_read_action(string_views, size);
     }
     log_out();
+    user_session_delete();
 
     return 0;
 }
