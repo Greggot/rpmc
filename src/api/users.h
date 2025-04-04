@@ -28,6 +28,7 @@ void user_list_delete(User_list*);
 typedef struct {
     User_list* head;
     User_list* current;
+	int size;
 } User_list_iterator;
 
 User_list_iterator rpmc_receive_users(long session, Receive_users_filter filter);

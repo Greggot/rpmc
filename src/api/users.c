@@ -23,6 +23,7 @@ static void user_list_add_user(User_list_iterator* list, const User* user)
         list->current->user = (User*)malloc(sizeof(User));
         list->current->next = NULL;
     }
+	++(list->size);
 
     User* ptr = list->current->user;
     ptr->name_length = user->name_length;
@@ -49,7 +50,8 @@ static User_list_iterator bogus_user_list(void)
 {
     User_list_iterator list = {
         .current = NULL,
-        .head = NULL
+        .head = NULL,
+		.size = 0
     };
 
     User users[] = {
